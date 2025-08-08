@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IIUC Course Tracker Dashboard</title>
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #f3f4f6; /* Tailwind gray-100 */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+    }
+
+    .container {
+      background: #ffffff;
+      max-width: 96rem; /* 6xl ~ 960px */
+      width: 100%;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      margin: 0;
+    }
+
+    .logo {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.5rem;
+      object-fit: contain;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .icons span {
+      margin-left: 1rem;
+      font-size: 1.25rem;
+      color: #6b7280;
+      cursor: pointer;
+    }
+
+    /* Welcome Section */
+    .welcome h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+    }
+
+    .welcome p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+
+    /* Stats Grid */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    @media(min-width: 640px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media(min-width: 1024px) {
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stat-box {
+      background-color: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin: 0.25rem 0 0;
+    }
+
+    /* Search Section */
+    .search-section {
+      margin-bottom: 1rem;
+    }
+
+    .search-section h3 {
+      font-weight: 600;
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .search-bar input[type="text"] {
+      flex-grow: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      outline: none;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .search-bar input[type="text"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    }
+
+    .search-bar button {
+      background-color: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .search-bar button:hover {
+      background-color: #e5e7eb;
+    }
+
+    /* Courses Grid */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media(min-width: 640px) {
+      .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(min-width: 1024px) {
+      .courses-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .course-card {
+      background-color: white;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .course-header {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .course-code {
+      background-color: #fde68a;
+      color: #78350f;
+      font-weight: 700;
+      font-size: 0.625rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      white-space: nowrap;
+    }
+
+    .course-department {
+      background-color: #f3f4f6;
+      font-size: 0.625rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      white-space: nowrap;
+      color: #6b7280;
+    }
+
+    .course-title {
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+    }
+
+    .course-instructor {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin: 0 0 0.5rem;
+    }
+
+    .course-description {
+      font-size: 0.75rem;
+      color: #4b5563;
+      margin: 0 0 1rem;
+      flex-grow: 1;
+    }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .view-course-btn {
+      background: none;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      width: 100%;
+    }
+
+    .view-course-btn:hover {
+      background-color: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div>
+        <h1 class="title">
+          <img src="https://upload.wikimedia.org/wikipedia/en/0/0f/International_Islamic_University_Chittagong_logo.png" alt="IIUC Logo" class="logo" />
+          IIUC Course Tracker
+        </h1>
+        <p class="subtitle">Student Dashboard</p>
+      </div>
+      <div class="icons" role="group" aria-label="Dashboard icons">
+        <span aria-label="Notifications" title="Notifications">🔔</span>
+        <span aria-label="Settings" title="Settings">⚙️</span>
+      </div>
+    </header>
+
+    <!-- Welcome Section -->
+    <section class="welcome">
+      <h2>Welcome back, Student!</h2>
+      <p>Here's an overview of your enrolled courses for this semester.</p>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+      <div class="stat-box">
+        <p class="stat-number">6</p>
+        <p class="stat-label">Enrolled Courses</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-number">18</p>
+        <p class="stat-label">Total Credits</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-number">3.75</p>
+        <p class="stat-label">Current GPA</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-number">12</p>
+        <p class="stat-label">Weeks Remaining</p>
+      </div>
+    </section>
+
+    <!-- My Courses -->
+    <section class="search-section">
+      <h3>My Courses</h3>
+      <div class="search-bar">
+        <input type="text" placeholder="Search courses, instructors, or course codes..." />
+        <button type="button">Schedule</button>
+      </div>
+    </section>
+
+    <!-- Courses Grid -->
+    <section class="courses-grid">
+      <!-- Course Card -->
+      <article class="course-card">
+        <div class="course-header">
+          <span class="course-code">CSE 101</span>
+          <span class="course-department">Computer Science</span>
+        </div>
+        <h4 class="course-title">Introduction to Programming</h4>
+        <p class="course-instructor">Instructor: Dr. Rahman Ahmed</p>
+        <p class="course-description">Fundamental concepts of programming using C++ and problem-solving techniques.</p>
+        <div class="course-meta">
+          <span>📅 16 weeks</span>
+          <span>👥 120 students</span>
+          <span>3 credits</span>
+        </div>
+        <button class="view-course-btn">View Course</button>
+      </article>
+
+      <article class="course-card">
+        <div class="course-header">
+          <span class="course-code">MAT 201</span>
+          <span class="course-department">Mathematics</span>
+        </div>
+        <h4 class="course-title">Calculus II</h4>
+        <p class="course-instructor">Instructor: Prof. Sarah Khan</p>
+        <p class="course-description">Advanced calculus including integration techniques, series, and differential equations.</p>
+        <div class="course-meta">
+          <span>📅 16 weeks</span>
+          <span>👥 85 students</span>
+          <span>4 credits</span>
+        </div>
+        <button class="view-course-btn">View Course</button>
+      </article>
+
+      <article class="course-card">
+        <div class="course-header">
+          <span class="course-code">PHY 101</span>
+          <span class="course-department">Physics</span>
+        </div>
+        <h4 class="course-title">Physics I</h4>
+        <p class="course-instructor">Instructor: Dr. Mohammad Ali</p>
+        <p class="course-description">Classical mechanics, thermodynamics, and wave phenomena with laboratory work.</p>
+        <div class="course-meta">
+          <span>📅 16 weeks</span>
+          <span>👥 95 students</span>
+          <span>3 credits</span>
+        </div>
+        <button class="view-course-btn">View Course</button>
+      </article>
+
+      <article class="course-card">
+        <div class="course-header">
+          <span class="course-code">ENG 102</span>
+          <span class="course-department">English</span>
+        </div>
+        <h4 class="course-title">Academic Writing</h4>
+        <p class="course-instructor">Instructor: Ms. Fatima Begum</p>
+        <p class="course-description">Advanced academic writing skills, research methodology, and presentation techniques.</p>
+        <div class="course-meta">
+          <span>📅 16 weeks</span>
+          <span>👥 150 students</span>
+          <span>2 credits</span>
+        </div>
+        <button class="view-course-btn">View Course</button>
+      </article>
+
+      <article class="course-card">
+        <div class="course-header">
+          <span class="course-code">CSE 201</span>
+          <span class="course-department">Computer Science</span>
+        </div>
+        <h4 class="course-title">Data Structures</h4>
+        <p class="course-instructor">Instructor: Dr. Karim Hassan</p>
+        <p class="course-description">Linear and non-linear data structures, algorithms, and complexity analysis.</p>
+        <div class="course-meta">
+          <span>📅 16 weeks</span>
+          <span>👥 78 students</span>
+          <span>3 credits</span>
+        </div>
+        <button class="view-course-btn">View Course</button>
+      </article>
+
+      <article class="course-card">
+        <div class="course-header">
+          <span class="course-code">ISL 101</span>
+          <span class="course-department">Islamic Studies</span>
+        </div>
+        <h4 class="course-title">Islamic Studies</h4>
+        <p class="course-instructor">Instructor: Maulana Abdul Malik</p>
+        <p class="course-description">Fundamental teachings of Islam, Quran, Hadith, and Islamic civilization.</p>
+        <div class="course-meta">
+          <span>📅 16 weeks</span>
+          <span>👥 200 students</span>
+          <span>3 credits</span>
+        </div>
+        <button class="view-course-btn">View Course</button>
+      </article>
+    </section>
+  </div>
+
+</body>
+</html>

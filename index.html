@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IIUC Course Tracker Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-image" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <main class="card" role="main" aria-labelledby="login-heading">
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <img src="https://upload.wikimedia.org/wikipedia/en/0/0f/International_Islamic_University_Chittagong_logo.png" alt="IIUC Logo" />
+      <p class="site-title">IIUC <span class="accent">Course Tracker</span></p>
+      <p class="site-sub">International Islamic University Chittagong</p>
+    </div>
+
+    <h2 id="login-heading">Student Login</h2>
+    <p class="desc">Sign in with your IIUC credentials to access your courses</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">IIUC Email Address</label>
+        <input id="email" name="email" type="email" placeholder="student@iiuc.ac.bd" autocomplete="email" required />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required />
+      </div>
+
+      <div class="row" style="margin-bottom:14px;">
+        <input id="remember" name="remember" type="checkbox" />
+        <label for="remember">Remember me</label>
+      </div>
+
+      <button type="submit" class="btn">🎓 Sign In to Dashboard</button>
+
+      <p class="help">
+        Need help? Contact IT Support at
+        <a href="mailto:it@iiuc.ac.bd">it@iiuc.ac.bd</a>
+      </p>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Stop page reload
+
+      const emailEl = document.getElementById("email");
+      const pwdEl = document.getElementById("password");
+
+      let email = emailEl.value.trim();
+      let password = pwdEl.value.trim();
+
+      if (email === "" || password === "") {
+        alert("Please enter both email and password!");
+        return;
+      }
+
+      if (!email.endsWith("@iiuc.ac.bd")) {
+        alert("Please enter a valid IIUC email address!");
+        emailEl.focus();
+        return;
+      }
+
+      // If validation passes → redirect
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>
